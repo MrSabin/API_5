@@ -1,5 +1,6 @@
 import requests
 from itertools import count
+from environs import Env
 
 
 def get_vacancies_count(role):
@@ -76,4 +77,14 @@ def average_salary_by_language():
     print(salary_info)
 
 
-average_salary_by_language()
+env = Env()
+env.read_env()
+superjob_secret_key = env.str("SUPERJOB_KEY")
+superjob_api_url = "https://api.superjob.ru/2.0/vacancies/"
+headers = {"X-Api-App-Id": superjob_secret_key}
+payload = {}
+response = requests.get(superjob_api_url, headers=headers, params=payload)
+response.raise_for_status()
+all_vacancies = response.json()
+for vacancy in all_vacancies["objects"]:
+    print(vacancy["profession"])
