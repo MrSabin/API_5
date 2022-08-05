@@ -36,22 +36,30 @@ def vacancy_by_language():
     print(search_result)
 
 
+def predict_salary(salary_from, salary_to):
+    if salary_from is None and salary_to is None:
+        return None
+    elif salary_from is None:
+        avg_salary = salary_to * 0.8
+        return avg_salary
+    elif salary_to is None:
+        avg_salary = salary_from * 1.2
+        return avg_salary
+    else:
+        avg_salary = (salary_from + salary_to) / 2
+        return avg_salary
+
+
 def predict_rub_salary_hh(vacancy):
     salary = vacancy["salary"]
+    salary_from = salary["from"]
+    salary_to = salary["to"]
     if salary is None or salary["currency"] != "RUR":
         return None
     else:
-        if salary["from"] is None and salary["to"] is None:
-            return None
-        elif salary["from"] is None:
-            avg_salary = salary["to"] * 0.8
-            return avg_salary
-        elif salary["to"] is None:
-            avg_salary = salary["from"] * 1.2
-            return avg_salary
-        else:
-            avg_salary = (salary["from"] + salary["to"]) / 2
-            return avg_salary
+        return predict_salary(salary_from, salary_to)
+
+
 
 
 def average_salary_by_language():
