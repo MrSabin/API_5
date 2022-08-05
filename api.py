@@ -29,9 +29,8 @@ def vacancy_by_language():
 
 def predict_rub_salary(vacancy):
     salary = vacancy["salary"]
-    print(salary)
-    if salary is None:
-        return "No salary data"
+    if salary is None or salary["currency"] != "RUR":
+        return None
     else:
         if salary["from"] is None and salary["to"] is None:
             return None
@@ -46,8 +45,27 @@ def predict_rub_salary(vacancy):
             return avg_salary
 
 
-vacancy_role = "Программист Python"
-filtered_vacancies = get_vacancies(vacancy_role)
+def average_salary_by_language():
+    languages = ["JavaScript", "Java", "Python", "Ruby", "PHP", "C++", "C#", "C", "Go"]
+    salary_info = {}
+    for language in languages:
+        role = "Программист {}".format(language)
+        total_vacancies = get_vacancies_count(role)
+        salaries = []
+        vacancies = get_vacancies(role)
+        for vacancy in vacancies["items"]:
+            salary = predict_rub_salary(vacancy)
+            if salary is not None:
+                salaries.append(salary)
+        avg_salary = sum(salaries) / len(salaries)
+        processed_vacancies = len(salaries)
+        total_information = {
+            "vacancies_found": total_vacancies,
+            "vacancies_processed": processed_vacancies,
+            "average_salary": int(avg_salary)
+        }
+        salary_info[language] = total_information
+    print(salary_info)
 
-for vacancy in filtered_vacancies["items"]:
-    print(predict_rub_salary(vacancy))
+
+average_salary_by_language()
