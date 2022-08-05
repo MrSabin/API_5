@@ -36,7 +36,7 @@ def vacancy_by_language():
     print(search_result)
 
 
-def predict_rub_salary(vacancy):
+def predict_rub_salary_hh(vacancy):
     salary = vacancy["salary"]
     if salary is None or salary["currency"] != "RUR":
         return None
@@ -63,7 +63,7 @@ def average_salary_by_language():
         salaries = []
         vacancies = get_vacancies(role)
         for vacancy in vacancies:
-            salary = predict_rub_salary(vacancy)
+            salary = predict_rub_salary_hh(vacancy)
             if salary is not None:
                 salaries.append(salary)
         avg_salary = sum(salaries) / len(salaries)
