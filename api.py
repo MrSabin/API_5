@@ -1,4 +1,5 @@
 import requests
+from itertools import count
 
 
 def get_vacancies_count(role):
@@ -11,9 +12,16 @@ def get_vacancies_count(role):
 
 def get_vacancies(role):
     base_api_url = "https://api.hh.ru/vacancies"
-    payload = {"HH-User-Agent": "dvmn_salary", "area": "1", "text": role}
-    response = requests.get(base_api_url, params=payload)
-    vacancies = response.json()
+    vacancies = []
+    for page in count(0):
+        print("Downloading page {} of role {}".format(page, role))
+        payload = {"HH-User-Agent": "dvmn_salary", "area": "1", "text": role, "per_page": "100", "page": page}
+        response = requests.get(base_api_url, params=payload)
+        vacancies_page = response.json()
+        for vacancy in vacancies_page["items"]:
+            vacancies.append(vacancy)
+        if page == 19 or page >= vacancies_page["pages"]:
+            break
     return vacancies
 
 
@@ -53,7 +61,7 @@ def average_salary_by_language():
         total_vacancies = get_vacancies_count(role)
         salaries = []
         vacancies = get_vacancies(role)
-        for vacancy in vacancies["items"]:
+        for vacancy in vacancies:
             salary = predict_rub_salary(vacancy)
             if salary is not None:
                 salaries.append(salary)
