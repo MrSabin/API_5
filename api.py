@@ -27,8 +27,27 @@ def vacancy_by_language():
     print(search_result)
 
 
+def predict_rub_salary(vacancy):
+    salary = vacancy["salary"]
+    print(salary)
+    if salary is None:
+        return "No salary data"
+    else:
+        if salary["from"] is None and salary["to"] is None:
+            return None
+        elif salary["from"] is None:
+            avg_salary = salary["to"] * 0.8
+            return avg_salary
+        elif salary["to"] is None:
+            avg_salary = salary["from"] * 1.2
+            return avg_salary
+        else:
+            avg_salary = (salary["from"] + salary["to"]) / 2
+            return avg_salary
+
+
 vacancy_role = "Программист Python"
 filtered_vacancies = get_vacancies(vacancy_role)
 
 for vacancy in filtered_vacancies["items"]:
-    print(vacancy["salary"])
+    print(predict_rub_salary(vacancy))
