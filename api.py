@@ -11,7 +11,7 @@ def get_vacancies_count(role):
     return total_vacancies
 
 
-def get_vacancies(role):
+def get_vacancies_hh(role):
     base_api_url = "https://api.hh.ru/vacancies"
     vacancies = []
     for page in count(0):
