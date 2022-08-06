@@ -81,26 +81,30 @@ def predict_rub_salary_sj(vacancy):
         salary_to = vacancy["payment_to"] if vacancy["payment_to"] != 0 else None
         return predict_salary(salary_from, salary_to)
 
+
+def get_vacancies_sj(key, language):
+    superjob_api_url = "https://api.superjob.ru/2.0/vacancies/"
+    vacancies = []
+    headers = {"X-Api-App-Id": key}
+    for page in count(0):
+        payload = {"catalogues": "48", "town": "4", "keyword": language, "count": "100", "page": page}
+        response = requests.get(superjob_api_url, headers=headers, params=payload)
+        response.raise_for_status()
+        all_vacancies = response.json()
+        for vacancy in all_vacancies["objects"]:
+            vacancies.append(vacancy)
+        if page == 5 or not all_vacancies["more"]:
+            break
+    return vacancies
+
+
 def main():
     env = Env()
     env.read_env()
     superjob_secret_key = env.str("SUPERJOB_KEY")
     languages = ["JavaScript", "Java", "Python", "Ruby", "PHP", "C++", "C#", "C", "Go"]
-
-
-def get_vacancies_sj(key):
-    superjob_api_url = "https://api.superjob.ru/2.0/vacancies/"
-    headers = {"X-Api-App-Id": key}
-    payload = {"catalogues": "48", "town": "4", "keyword": "PHP"}
-    response = requests.get(superjob_api_url, headers=headers, params=payload)
-    response.raise_for_status()
-    all_vacancies = response.json()
-    for vacancy in all_vacancies["objects"]:
-        print("{}, {}, {}".format(
-            vacancy["profession"],
-            vacancy["town"]["title"],
-            predict_rub_salary_sj(vacancy)
-        ))
+    for language in languages:
+        get_vacancies_sj(superjob_secret_key, language)
 
 
 if __name__ == "__main__":
