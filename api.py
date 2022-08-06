@@ -52,11 +52,11 @@ def predict_salary(salary_from, salary_to):
 
 def predict_rub_salary_hh(vacancy):
     salary = vacancy["salary"]
-    salary_from = salary["from"]
-    salary_to = salary["to"]
     if salary is None or salary["currency"] != "RUR":
         return None
     else:
+        salary_from = salary["from"]
+        salary_to = salary["to"]
         return predict_salary(salary_from, salary_to)
 
 
