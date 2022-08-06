@@ -72,6 +72,15 @@ def vacancy_statistic_hh(languages):
     print(salary_info)
 
 
+def predict_rub_salary_sj(vacancy):
+    if vacancy["currency"] != "rub":
+        return None
+    else:
+        salary_from = vacancy["payment_from"] if vacancy["payment_from"] != 0 else None
+        salary_to = vacancy["payment_to"] if vacancy["payment_to"] != 0 else None
+        return predict_salary(salary_from, salary_to)
+
+
 env = Env()
 env.read_env()
 superjob_secret_key = env.str("SUPERJOB_KEY")
