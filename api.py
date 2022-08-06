@@ -78,11 +78,19 @@ def average_salary_by_language():
 env = Env()
 env.read_env()
 superjob_secret_key = env.str("SUPERJOB_KEY")
-superjob_api_url = "https://api.superjob.ru/2.0/vacancies/"
-headers = {"X-Api-App-Id": superjob_secret_key}
-payload = {"catalogues": "48", "town": "4"}
-response = requests.get(superjob_api_url, headers=headers, params=payload)
-response.raise_for_status()
-all_vacancies = response.json()
-for vacancy in all_vacancies["objects"]:
-    print("{}, {}".format(vacancy["profession"], vacancy["town"]["title"]))
+languages = ["JavaScript", "Java", "Python", "Ruby", "PHP", "C++", "C#", "C", "Go"]
+
+
+def get_vacancies_sj(key):
+    superjob_api_url = "https://api.superjob.ru/2.0/vacancies/"
+    headers = {"X-Api-App-Id": key}
+    payload = {"catalogues": "48", "town": "4", "keyword": "PHP"}
+    response = requests.get(superjob_api_url, headers=headers, params=payload)
+    response.raise_for_status()
+    all_vacancies = response.json()
+    for vacancy in all_vacancies["objects"]:
+        print("{}, {}, {}".format(
+            vacancy["profession"],
+            vacancy["town"]["title"],
+            predict_rub_salary_sj(vacancy)
+        ))
