@@ -52,7 +52,7 @@ def predict_rub_salary_hh(vacancy):
 
 
 def vacancy_statistic_hh(languages):
-    salary_info = {}
+    salaries_statistic = {}
     for language in languages:
         role = "Программист {}".format(language)
         total_vacancies = get_vacancies_count(role)
@@ -69,8 +69,8 @@ def vacancy_statistic_hh(languages):
             "vacancies_processed": processed_vacancies,
             "average_salary": int(avg_salary)
         }
-        salary_info[language] = total_information
-    print(salary_info)
+        salaries_statistic[language] = total_information
+    return salaries_statistic
 
 
 def predict_rub_salary_sj(vacancy):
