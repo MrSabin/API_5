@@ -98,13 +98,34 @@ def get_vacancies_sj(key, language):
     return vacancies
 
 
+def vacancy_statistic_sj(key, languages):
+    salaries_statistic = {}
+    for language in languages:
+        salaries = []
+        vacancies = get_vacancies_sj(key, language)
+        total_vacancies = len(vacancies)
+        for vacancy in vacancies:
+            salary = predict_rub_salary_sj(vacancy)
+            if salary is not None:
+                salaries.append(salary)
+        avg_salary = sum(salaries) / len(salaries)
+        processed_vacancies = len(salaries)
+        total_information = {
+            "vacancies_found": total_vacancies,
+            "vacancies_processed": processed_vacancies,
+            "average_salary": int(avg_salary)
+        }
+        salaries_statistic[language] = total_information
+    return salaries_statistic
+
+
 def main():
     env = Env()
     env.read_env()
     superjob_secret_key = env.str("SUPERJOB_KEY")
     languages = ["JavaScript", "Java", "Python", "Ruby", "PHP", "C++", "C#", "C", "Go"]
-    for language in languages:
-        get_vacancies_sj(superjob_secret_key, language)
+    vacancy_statistic_sj(superjob_secret_key, languages)
+    vacancy_statistic_hh(languages)
 
 
 if __name__ == "__main__":
