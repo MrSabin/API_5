@@ -81,11 +81,11 @@ def predict_rub_salary_sj(vacancy):
         salary_to = vacancy["payment_to"] if vacancy["payment_to"] != 0 else None
         return predict_salary(salary_from, salary_to)
 
-
-env = Env()
-env.read_env()
-superjob_secret_key = env.str("SUPERJOB_KEY")
-languages = ["JavaScript", "Java", "Python", "Ruby", "PHP", "C++", "C#", "C", "Go"]
+def main():
+    env = Env()
+    env.read_env()
+    superjob_secret_key = env.str("SUPERJOB_KEY")
+    languages = ["JavaScript", "Java", "Python", "Ruby", "PHP", "C++", "C#", "C", "Go"]
 
 
 def get_vacancies_sj(key):
@@ -101,3 +101,7 @@ def get_vacancies_sj(key):
             vacancy["town"]["title"],
             predict_rub_salary_sj(vacancy)
         ))
+
+
+if __name__ == "__main__":
+    main()
