@@ -50,16 +50,13 @@ def predict_rub_salary_hh(vacancy):
         return predict_salary(salary_from, salary_to)
 
 
-
-
-def average_salary_by_language():
-    languages = ["JavaScript", "Java", "Python", "Ruby", "PHP", "C++", "C#", "C", "Go"]
+def vacancy_statistic_hh(languages):
     salary_info = {}
     for language in languages:
         role = "Программист {}".format(language)
         total_vacancies = get_vacancies_count(role)
         salaries = []
-        vacancies = get_vacancies(role)
+        vacancies = get_vacancies_hh(role)
         for vacancy in vacancies:
             salary = predict_rub_salary_hh(vacancy)
             if salary is not None:
