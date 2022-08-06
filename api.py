@@ -26,16 +26,6 @@ def get_vacancies_hh(role):
     return vacancies
 
 
-def vacancy_by_language():
-    languages = ["JavaScript", "Java", "Python", "Ruby", "PHP", "C++", "C#", "C", "Go"]
-    search_result = {}
-    for language in languages:
-        role = "Программист {}".format(language)
-        vacancies_count = get_vacancies_count(role)
-        search_result[language] = vacancies_count
-    print(search_result)
-
-
 def predict_salary(salary_from, salary_to):
     if salary_from is None and salary_to is None:
         return None
