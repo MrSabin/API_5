@@ -1,6 +1,7 @@
 import requests
 from itertools import count
 from environs import Env
+from terminaltables import AsciiTable
 
 
 def get_vacancies_count(role):
