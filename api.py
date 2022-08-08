@@ -129,8 +129,10 @@ def main():
     env.read_env()
     superjob_secret_key = env.str("SUPERJOB_KEY")
     languages = ["JavaScript", "Java", "Python", "Ruby", "PHP", "C++", "C#", "C", "Go"]
-    vacancy_statistic_sj(superjob_secret_key, languages)
-    vacancy_statistic_hh(languages)
+    collected_sj_statistic = vacancy_statistic_sj(superjob_secret_key, languages)
+    collected_hh_statistic = vacancy_statistic_hh(languages)
+    print(process_statistic(collected_sj_statistic, "SuperJob Moscow"))
+    print(process_statistic(collected_hh_statistic, "HeadHunter Moscow"))
 
 
 if __name__ == "__main__":
