@@ -73,9 +73,9 @@ def vacancy_statistic_hh(languages):
     salaries_statistic = {}
     for language in languages:
         role = "Программист {}".format(language)
-        total_vacancies = get_vacancies_count(role)
         salaries = []
         vacancies = get_vacancies_hh(role)
+        total_vacancies = len(vacancies)
         for vacancy in vacancies:
             salary = predict_rub_salary_hh(vacancy)
             if salary is not None:
