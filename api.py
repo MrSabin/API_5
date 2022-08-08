@@ -12,17 +12,33 @@ def get_vacancies_count(role):
     return total_vacancies
 
 
-def get_vacancies_hh(role):
+def get_vacancies_hh(role) -> list:
     base_api_url = "https://api.hh.ru/vacancies"
     vacancies = []
     for page in count(0):
-        print("Downloading page {} of role {}".format(page, role))
+        print("Downloading page {} of {}".format(page, role))
         payload = {"HH-User-Agent": "dvmn_salary", "area": "1", "text": role, "per_page": "100", "page": page}
         response = requests.get(base_api_url, params=payload)
         vacancies_page = response.json()
         for vacancy in vacancies_page["items"]:
             vacancies.append(vacancy)
         if page == 19 or page >= vacancies_page["pages"]:
+            break
+    return vacancies
+
+
+def get_vacancies_sj(key, language) -> list:
+    superjob_api_url = "https://api.superjob.ru/2.0/vacancies/"
+    vacancies = []
+    headers = {"X-Api-App-Id": key}
+    for page in count(0):
+        payload = {"catalogues": "48", "town": "4", "keyword": language, "count": "100", "page": page}
+        response = requests.get(superjob_api_url, headers=headers, params=payload)
+        response.raise_for_status()
+        all_vacancies = response.json()
+        for vacancy in all_vacancies["objects"]:
+            vacancies.append(vacancy)
+        if page == 5 or not all_vacancies["more"]:
             break
     return vacancies
 
@@ -51,6 +67,15 @@ def predict_rub_salary_hh(vacancy):
         return predict_salary(salary_from, salary_to)
 
 
+def predict_rub_salary_sj(vacancy):
+    if vacancy["currency"] != "rub":
+        return None
+    else:
+        salary_from = vacancy["payment_from"] if vacancy["payment_from"] != 0 else None
+        salary_to = vacancy["payment_to"] if vacancy["payment_to"] != 0 else None
+        return predict_salary(salary_from, salary_to)
+
+
 def vacancy_statistic_hh(languages):
     salaries_statistic = {}
     for language in languages:
@@ -71,31 +96,6 @@ def vacancy_statistic_hh(languages):
         }
         salaries_statistic[language] = total_information
     return salaries_statistic
-
-
-def predict_rub_salary_sj(vacancy):
-    if vacancy["currency"] != "rub":
-        return None
-    else:
-        salary_from = vacancy["payment_from"] if vacancy["payment_from"] != 0 else None
-        salary_to = vacancy["payment_to"] if vacancy["payment_to"] != 0 else None
-        return predict_salary(salary_from, salary_to)
-
-
-def get_vacancies_sj(key, language):
-    superjob_api_url = "https://api.superjob.ru/2.0/vacancies/"
-    vacancies = []
-    headers = {"X-Api-App-Id": key}
-    for page in count(0):
-        payload = {"catalogues": "48", "town": "4", "keyword": language, "count": "100", "page": page}
-        response = requests.get(superjob_api_url, headers=headers, params=payload)
-        response.raise_for_status()
-        all_vacancies = response.json()
-        for vacancy in all_vacancies["objects"]:
-            vacancies.append(vacancy)
-        if page == 5 or not all_vacancies["more"]:
-            break
-    return vacancies
 
 
 def vacancy_statistic_sj(key, languages):
