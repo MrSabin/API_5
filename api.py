@@ -112,6 +112,18 @@ def vacancy_statistic_sj(key, languages):
     return salaries_statistic
 
 
+def process_statistic(fetched_statistic, title):
+    column_headers = ["Язык программирования", "Вакансий найдено",
+                      "Вакансий обработано", "Средняя зарплата"]
+    processed_statistic = [column_headers]
+    for language, stats in fetched_statistic.items():
+        statistic = [language]
+        statistic.extend(stats.values())
+        processed_statistic.append(statistic)
+    table_instance = AsciiTable(processed_statistic, title)
+    return table_instance.table
+
+
 def main():
     env = Env()
     env.read_env()
