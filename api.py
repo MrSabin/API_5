@@ -1,5 +1,6 @@
-import requests
 from itertools import count
+
+import requests
 from environs import Env
 from terminaltables import AsciiTable
 
@@ -8,7 +9,6 @@ def get_vacancies_hh(role) -> list:
     base_api_url = "https://api.hh.ru/vacancies"
     vacancies = []
     for page in count(0):
-        print("Downloading page {} of {}".format(page, role))
         payload = {"HH-User-Agent": "dvmn_salary", "area": "1", "text": role, "per_page": "100", "page": page}
         response = requests.get(base_api_url, params=payload)
         response.raise_for_status()
@@ -71,6 +71,7 @@ def predict_rub_salary_sj(vacancy):
 
 def vacancy_statistic_hh(languages):
     salaries_statistic = {}
+    print("Downloading HeadHunter vacancies...")
     for language in languages:
         role = "Программист {}".format(language)
         salaries = []
@@ -93,6 +94,7 @@ def vacancy_statistic_hh(languages):
 
 def vacancy_statistic_sj(key, languages):
     salaries_statistic = {}
+    print("Downloading SuperJob vacancies...")
     for language in languages:
         salaries = []
         vacancies = get_vacancies_sj(key, language)
