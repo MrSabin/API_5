@@ -8,6 +8,7 @@ def get_vacancies_count(role):
     base_api_url = "https://api.hh.ru/vacancies"
     payload = {"HH-User-Agent": "dvmn_salary", "area": "1", "text": role}
     response = requests.get(base_api_url, params=payload)
+    response.raise_for_status()
     total_vacancies = response.json().get("found")
     return total_vacancies
 
@@ -19,6 +20,7 @@ def get_vacancies_hh(role) -> list:
         print("Downloading page {} of {}".format(page, role))
         payload = {"HH-User-Agent": "dvmn_salary", "area": "1", "text": role, "per_page": "100", "page": page}
         response = requests.get(base_api_url, params=payload)
+        response.raise_for_status()
         vacancies_page = response.json()
         for vacancy in vacancies_page["items"]:
             vacancies.append(vacancy)
