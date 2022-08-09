@@ -91,7 +91,10 @@ def vacancy_statistic_hh(languages):
             salary = predict_rub_salary_hh(vacancy)
             if salary:
                 salaries.append(salary)
-        avg_salary = sum(salaries) / len(salaries)
+        try:
+            avg_salary = sum(salaries) / len(salaries)
+        except ZeroDivisionError:
+            avg_salary = 0
         processed_vacancies = len(salaries)
         total_information = {
             "vacancies_found": total_vacancies,
@@ -112,7 +115,10 @@ def vacancy_statistic_sj(key, languages):
             salary = predict_rub_salary_sj(vacancy)
             if salary:
                 salaries.append(salary)
-        avg_salary = sum(salaries) / len(salaries)
+        try:
+            avg_salary = sum(salaries) / len(salaries)
+        except ZeroDivisionError:
+            avg_salary = 0
         processed_vacancies = len(salaries)
         total_information = {
             "vacancies_found": total_vacancies,
