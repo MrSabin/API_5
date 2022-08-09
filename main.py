@@ -8,6 +8,7 @@ from terminaltables import AsciiTable
 def get_vacancies_hh(role) -> list:
     base_api_url = "https://api.hh.ru/vacancies"
     vacancies = []
+    max_pages = 19
     for page in count(0):
         payload = {"HH-User-Agent": "dvmn_salary", "area": "1", "text": role, "per_page": "100", "page": page}
         response = requests.get(base_api_url, params=payload)
@@ -15,7 +16,7 @@ def get_vacancies_hh(role) -> list:
         vacancies_page = response.json()
         for vacancy in vacancies_page["items"]:
             vacancies.append(vacancy)
-        if page == 19 or page >= vacancies_page["pages"]:
+        if page == max_pages or page >= vacancies_page["pages"]:
             break
     return vacancies
 
@@ -24,6 +25,7 @@ def get_vacancies_sj(key, language) -> list:
     superjob_api_url = "https://api.superjob.ru/2.0/vacancies/"
     vacancies = []
     headers = {"X-Api-App-Id": key}
+    max_pages = 5
     for page in count(0):
         payload = {"catalogues": "48", "town": "4", "keyword": language, "count": "100", "page": page}
         response = requests.get(superjob_api_url, headers=headers, params=payload)
@@ -31,7 +33,7 @@ def get_vacancies_sj(key, language) -> list:
         all_vacancies = response.json()
         for vacancy in all_vacancies["objects"]:
             vacancies.append(vacancy)
-        if page == 5 or not all_vacancies["more"]:
+        if page == max_pages or not all_vacancies["more"]:
             break
     return vacancies
 
