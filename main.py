@@ -39,12 +39,12 @@ def get_vacancies_sj(key, language) -> list:
 
 
 def predict_salary(salary_from, salary_to):
-    if salary_from is None and salary_to is None:
+    if not salary_from and not salary_to:
         return None
-    elif salary_from is None:
+    elif not salary_from:
         avg_salary = salary_to * 0.8
         return avg_salary
-    elif salary_to is None:
+    elif not salary_to:
         avg_salary = salary_from * 1.2
         return avg_salary
     else:
