@@ -89,7 +89,7 @@ def vacancy_statistic_hh(languages):
         total_vacancies = len(vacancies)
         for vacancy in vacancies:
             salary = predict_rub_salary_hh(vacancy)
-            if salary is not None:
+            if salary:
                 salaries.append(salary)
         avg_salary = sum(salaries) / len(salaries)
         processed_vacancies = len(salaries)
@@ -110,7 +110,7 @@ def vacancy_statistic_sj(key, languages):
         total_vacancies = len(vacancies)
         for vacancy in vacancies:
             salary = predict_rub_salary_sj(vacancy)
-            if salary is not None:
+            if salary:
                 salaries.append(salary)
         avg_salary = sum(salaries) / len(salaries)
         processed_vacancies = len(salaries)
