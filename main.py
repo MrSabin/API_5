@@ -9,8 +9,14 @@ def get_vacancies_hh(role) -> list:
     base_api_url = "https://api.hh.ru/vacancies"
     vacancies = []
     max_pages = 19
+    area_id = 1                                 # Moscow
     for page in count(0):
-        payload = {"HH-User-Agent": "dvmn_salary", "area": "1", "text": role, "per_page": "100", "page": page}
+        payload = {
+            "HH-User-Agent": "dvmn_salary",
+            "area": area_id,
+            "text": role,
+            "per_page": "100",
+            "page": page}
         response = requests.get(base_api_url, params=payload)
         response.raise_for_status()
         vacancies_page = response.json()
@@ -26,8 +32,15 @@ def get_vacancies_sj(key, language) -> list:
     vacancies = []
     headers = {"X-Api-App-Id": key}
     max_pages = 5
+    profession_id = 48                          # "Programming and development"
+    town_id = 4                                 # Moscow
     for page in count(0):
-        payload = {"catalogues": "48", "town": "4", "keyword": language, "count": "100", "page": page}
+        payload = {
+            "catalogues": profession_id,
+            "town": town_id,
+            "keyword": language,
+            "count": "100",
+            "page": page}
         response = requests.get(superjob_api_url, headers=headers, params=payload)
         response.raise_for_status()
         all_vacancies = response.json()
