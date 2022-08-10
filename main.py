@@ -80,7 +80,7 @@ def predict_rub_salary_sj(vacancy):
         return predict_salary(salary_from, salary_to)
 
 
-def vacancy_statistic_hh(languages):
+def get_vacancy_statistic_hh(languages):
     salaries_statistic = {}
     for language in languages:
         role = "Программист {}".format(language)
@@ -105,7 +105,7 @@ def vacancy_statistic_hh(languages):
     return salaries_statistic
 
 
-def vacancy_statistic_sj(key, languages):
+def get_vacancy_statistic_sj(key, languages):
     salaries_statistic = {}
     for language in languages:
         salaries = []
@@ -147,9 +147,9 @@ def main():
     superjob_secret_key = env.str("SUPERJOB_KEY")
     languages = ["JavaScript", "Java", "Python", "Ruby", "PHP", "C++", "C#", "C", "Go"]
     print("Downloading SuperJob vacancies...")
-    collected_sj_statistic = vacancy_statistic_sj(superjob_secret_key, languages)
+    collected_sj_statistic = get_vacancy_statistic_sj(superjob_secret_key, languages)
     print("Downloading HeadHunter vacancies...")
-    collected_hh_statistic = vacancy_statistic_hh(languages)
+    collected_hh_statistic = get_vacancy_statistic_hh(languages)
     print(process_statistic(collected_sj_statistic, "SuperJob Moscow"))
     print(process_statistic(collected_hh_statistic, "HeadHunter Moscow"))
 
