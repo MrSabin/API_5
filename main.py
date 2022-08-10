@@ -20,8 +20,7 @@ def get_vacancies_hh(role) -> list:
         response = requests.get(base_api_url, params=payload)
         response.raise_for_status()
         vacancies_page = response.json()
-        for vacancy in vacancies_page["items"]:
-            vacancies.append(vacancy)
+        vacancies.extend(vacancies_page["items"])
         if page == max_pages or page >= vacancies_page["pages"]:
             break
     return vacancies
@@ -44,8 +43,7 @@ def get_vacancies_sj(key, language) -> list:
         response = requests.get(superjob_api_url, headers=headers, params=payload)
         response.raise_for_status()
         all_vacancies = response.json()
-        for vacancy in all_vacancies["objects"]:
-            vacancies.append(vacancy)
+        vacancies.extend(all_vacancies["objects"])
         if page == max_pages or not all_vacancies["more"]:
             break
     return vacancies
